@@ -42,7 +42,7 @@ namespace staff.business
                         break;
 
                     case 1:
-                        obj.read();
+                        obj.selectsp();
 
                         break;
 

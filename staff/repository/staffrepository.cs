@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 using Dapper;
 using System.Data.SqlClient;
 
@@ -12,19 +13,19 @@ using staff.business;
 
 namespace staff.repository
 {
- public class staffregisterinfo
-    { 
-
-                public readonly string connectionstring;
-
-
-
-    public staffregisterinfo()
+    public class staffregisterinfo
     {
-        connectionstring = @"Data source=DESKTOP-531QTCP;Initial catalog=staff;User Id=sa;Password=Anaiyaan@123";
-    }
 
-    public staffmodel data()
+        public readonly string connectionstring;
+
+
+
+        public staffregisterinfo()
+        {
+            connectionstring = @"Data source=DESKTOP-531QTCP;Initial catalog=staff;User Id=sa;Password=Anaiyaan@123";
+        }
+
+        public staffmodel data()
         {
             staffmodel emp = new staffmodel();
 
@@ -63,7 +64,7 @@ namespace staff.repository
                 throw ex;
             }
         }
-        public List<staffmodel> read()
+        public List<staffmodel> selectsp()
         {
             try
             {
@@ -92,8 +93,70 @@ namespace staff.repository
                 throw ex;
             }
         }
+        public void updatesp(staffmodel emp)
+        {
+            try
+            {
+                SqlConnection connection = new SqlConnection(connectionstring);
 
+
+                connection.Open();
+                connection.Execute($"  exec updatespstaff '{emp.NAME}','{emp.LASTNAME}','{emp.PHONENUMBER}','{emp.ADDERS}''where id ='{ emp.ID}' "); 
+                connection.Close();
+
+            }
+            catch (SqlException e)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public void deletesp(int id)
+        {
+            try
+            {
+                SqlConnection connection = new SqlConnection(connectionstring);
+
+                connection.Open();
+                connection.Execute($" delete from  staff where id  ='{id}'");
+                connection.Close();
+
+            }
+            catch (SqlException e)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        public staffmodel selectname(int id)
+        {
+            try
+            {
+
+                SqlConnection connection = new SqlConnection(connectionstring);
+
+                connection.Open();
+                var result = connection.QueryFirst<staffmodel>($"select * from staff where id = '{id}'");
+                connection.Close();
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+        }
 
     }
-
 }
