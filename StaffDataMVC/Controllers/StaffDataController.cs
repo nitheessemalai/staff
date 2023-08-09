@@ -5,44 +5,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using staff.repository;
+using staff.model;
+
 
 namespace StaffDataMVC.Controllers
 {
-    public class StaffDataController1 : Controller
+    public class StaffDataController : Controller
 
     {
 
         staffregisterinfo obj;
-        public StaffDataController1()
+        public StaffDataController()
         {
             obj = new staffregisterinfo();
         }
         // GET: StaffDataController1
         public ActionResult List()
         {
-            return View("List", obj.selectsp()); 
+            return View("Select", obj.selectsp()); 
         }
 
         // GET: StaffDataController1/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+           
+            var result = obj.selectname(id);
+            return View("Details", result);
         }
 
         // GET: StaffDataController1/Create
         public ActionResult Create()
         {
-            return View();
+            
+            return View("create",new staffmodel());
         }
 
         // POST: StaffDataController1/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(staffmodel data)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                obj.insertsp(data);
+               
+                return RedirectToAction(nameof(List));
             }
             catch
             {
@@ -53,17 +60,20 @@ namespace StaffDataMVC.Controllers
         // GET: StaffDataController1/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var result = obj.selectname(id);
+            return View("Edit", result);
         }
 
         // POST: StaffDataController1/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, staffmodel data)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                data.ID = id;
+                obj.updatesp(data);
+                return RedirectToAction(nameof(List));
             }
             catch
             {
@@ -74,17 +84,23 @@ namespace StaffDataMVC.Controllers
         // GET: StaffDataController1/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var result = obj.selectname(id);
+
+            return View("Delete", result);
+
+            
         }
 
         // POST: StaffDataController1/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, staffmodel data)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                obj.deletesp(id);
+                return RedirectToAction(nameof(List));
+               
             }
             catch
             {
